@@ -77,6 +77,8 @@ func main() {
 	for scanner.Scan() {
 		source, content := splitSpec(scanner.Text())
 		destinationFile := path.Join(output_directory, source)
+		destinationFile = strings.Replace(destinationFile, "/templates", "", -1)
+		destinationFile = strings.Replace(destinationFile, "/charts", "", -1)
 		dir := path.Dir(destinationFile)
 		if err := os.MkdirAll(dir, 0750); err != nil {
 			log.Fatalf("Error creating %s: %s ", dir, err)
