@@ -57,6 +57,9 @@ func main() {
 	}
 
 	output_directory := flag.Arg(0)
+	if output_directory == "" {
+		log.Fatalf(`invalid output source dir`, output_directory)
+	}
 
 	// if _, err := os.Stat(output_directory); !os.IsNotExist(err) {
 	// 	if force {
