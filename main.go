@@ -61,15 +61,6 @@ func main() {
 		log.Fatalf(`invalid output source dir`, output_directory)
 	}
 
-	// if _, err := os.Stat(output_directory); !os.IsNotExist(err) {
-	// 	if force {
-	// 		log.Printf("Deleting %s (force)\n", output_directory)
-	// 		os.RemoveAll(output_directory)
-	// 	} else {
-	// 		log.Fatalf(`Output directory "%v" already exists. Use -f to delete it.`, output_directory)
-	// 	}
-	// }
-
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Split(scanYamlSpecs)
 	//Allow for tokens (specs) up to 1M in size
@@ -92,7 +83,7 @@ func main() {
 			firstPath := strings.Split(source, "/")[0]
 			oldRootPath := path.Join(output_directory, firstPath)
 			log.Printf("Deleting %s (force)\n", oldRootPath)
-			// os.RemoveAll(oldRootPath)
+			os.RemoveAll(oldRootPath)
 			flag = false
 		} else {
 			log.Fatalf(`Output directory "%v" already exists. Use -f to delete it.`, dir)
