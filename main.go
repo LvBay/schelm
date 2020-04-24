@@ -58,14 +58,14 @@ func main() {
 
 	output_directory := flag.Arg(0)
 
-	if _, err := os.Stat(output_directory); !os.IsNotExist(err) {
-		if force {
-			log.Printf("Deleting %s (force)\n", output_directory)
-			os.RemoveAll(output_directory)
-		} else {
-			log.Fatalf(`Output directory "%v" already exists. Use -f to delete it.`, output_directory)
-		}
-	}
+	// if _, err := os.Stat(output_directory); !os.IsNotExist(err) {
+	// 	if force {
+	// 		log.Printf("Deleting %s (force)\n", output_directory)
+	// 		os.RemoveAll(output_directory)
+	// 	} else {
+	// 		log.Fatalf(`Output directory "%v" already exists. Use -f to delete it.`, output_directory)
+	// 	}
+	// }
 
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Split(scanYamlSpecs)
@@ -80,6 +80,12 @@ func main() {
 		destinationFile = strings.Replace(destinationFile, "/templates", "", -1)
 		destinationFile = strings.Replace(destinationFile, "/charts", "", -1)
 		dir := path.Dir(destinationFile)
+		if force {
+			log.Printf("Deleting %s (force)\n", dir)
+			os.RemoveAll(dir)
+		} else {
+			log.Fatalf(`Output directory "%v" already exists. Use -f to delete it.`, dir)
+		}
 		if err := os.MkdirAll(dir, 0750); err != nil {
 			log.Fatalf("Error creating %s: %s ", dir, err)
 		}
