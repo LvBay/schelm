@@ -73,6 +73,7 @@ func main() {
 	scanner.Buffer(make([]byte, bufio.MaxScanTokenSize), 1048576)
 	//Discard the first result, we only care about everything after the first seperator
 	scanner.Scan()
+	flag := true
 
 	for scanner.Scan() {
 		source, content := splitSpec(scanner.Text())
@@ -80,9 +81,16 @@ func main() {
 		destinationFile = strings.Replace(destinationFile, "/templates", "", -1)
 		destinationFile = strings.Replace(destinationFile, "/charts", "", -1)
 		dir := path.Dir(destinationFile)
-		if force {
-			log.Printf("Deleting %s (force)\n", dir)
-			os.RemoveAll(dir)
+		if force && flag {
+			if len(strings.Split(source, "/")) == 0 {
+				log.Fatalf(`invalid output source dir`, source)
+				return
+			}
+			firstPath := strings.Split(source, "/")[0]
+			oldRootPath := path.Join(output_directory, firstPath)
+			log.Printf("Deleting %s (force)\n", oldRootPath)
+			// os.RemoveAll(oldRootPath)
+			flag = false
 		} else {
 			log.Fatalf(`Output directory "%v" already exists. Use -f to delete it.`, dir)
 		}
