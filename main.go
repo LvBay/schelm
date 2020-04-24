@@ -57,9 +57,6 @@ func main() {
 	}
 
 	output_directory := flag.Arg(0)
-	if output_directory == "" {
-		log.Fatalf(`invalid output source dir`, output_directory)
-	}
 
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Split(scanYamlSpecs)
@@ -85,8 +82,6 @@ func main() {
 			log.Printf("Deleting %s (force)\n", oldRootPath)
 			os.RemoveAll(oldRootPath)
 			flag = false
-		} else {
-			log.Fatalf(`Output directory "%v" already exists. Use -f to delete it.`, dir)
 		}
 		if err := os.MkdirAll(dir, 0750); err != nil {
 			log.Fatalf("Error creating %s: %s ", dir, err)
